@@ -70,7 +70,7 @@ class DomainListener implements EventSubscriberInterface
             return;
         }
 
-        $uri = $request->getRequestUri();
+        $uri = $request->getUri();
 
         $matches = [];
         foreach ($domains as $domain) {
