@@ -97,9 +97,9 @@ class WebsiteEntity
 
     /**
      * @var int Type of the locale selection
-     * @ORM\Column(type="integer", nullable=false, options={default=1})
+     * @ORM\Column(type="integer", nullable=false, options={"default"=1})
      */
-    private $localeType = 1;
+    private $localeType = self::LOCALE_TYPE_PARAMETER;
 
     /**
      * @var CountryEntity
