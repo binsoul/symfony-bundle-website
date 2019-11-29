@@ -130,7 +130,7 @@ class WebsiteEntity
      * @var CurrencyEntity[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity")
      * @ORM\JoinTable(
-     *     name="website_country",
+     *     name="website_currency",
      *     joinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="currency_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
