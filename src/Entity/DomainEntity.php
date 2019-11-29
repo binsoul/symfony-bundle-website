@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity()
  * @ORM\Table(
- *     name="system_domain",
+ *     name="domain",
  *     uniqueConstraints={
  *        @ORM\UniqueConstraint(columns={"url"}),
  *     }

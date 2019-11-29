@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity()
  * @ORM\Table(
- *     name="system_website",
+ *     name="website",
  *     uniqueConstraints={
  *        @ORM\UniqueConstraint(columns={"name"}),
  *     }
@@ -88,7 +88,7 @@ class WebsiteEntity
      * @var LocaleEntity[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
      * @ORM\JoinTable(
-     *     name="system_website_locale",
+     *     name="website_locale",
      *     joinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="locale_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -112,7 +112,7 @@ class WebsiteEntity
      * @var CountryEntity[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity")
      * @ORM\JoinTable(
-     *     name="system_website_country",
+     *     name="website_country",
      *     joinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="country_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -130,7 +130,7 @@ class WebsiteEntity
      * @var CurrencyEntity[]|ArrayCollection
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity")
      * @ORM\JoinTable(
-     *     name="system_website_country",
+     *     name="website_country",
      *     joinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="currency_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
