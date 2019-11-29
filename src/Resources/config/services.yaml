@@ -7,3 +7,7 @@ services:
     BinSoul\Symfony\Bundle\Website\Repository\:
         resource: '../../Repository/*'
         public: true
+
+    BinSoul\Symfony\Bundle\Website\EventListener\:
+        resource: '../../EventListener/*'
+        tags: [kernel.event_subscriber]
