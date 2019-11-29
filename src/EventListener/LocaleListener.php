@@ -61,19 +61,6 @@ class LocaleListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        $this->setLocale($request);
-        $this->setRouterContext($request);
-    }
-
-    public function onKernelFinishRequest(): void
-    {
-        if (null !== $parentRequest = $this->requestStack->getParentRequest()) {
-            $this->setRouterContext($parentRequest);
-        }
-    }
-
-    private function setLocale(Request $request): void
-    {
         $domain = $request->attributes->get('domain');
         if (!($domain instanceof DomainEntity)) {
             return;
@@ -81,23 +68,37 @@ class LocaleListener implements EventSubscriberInterface
 
         $locale = $this->getLocale($domain, $request);
 
+        $this->setLocale($request, $locale);
+        $this->setRouterContext($locale);
+    }
+
+    public function onKernelFinishRequest(): void
+    {
+        $parentRequest = $this->requestStack->getParentRequest();
+        if ($parentRequest === null) {
+            return;
+        }
+
+        $domain = $parentRequest->attributes->get('domain');
+        if (!($domain instanceof DomainEntity)) {
+            return;
+        }
+
+        $this->setRouterContext($this->getLocale($domain, $parentRequest));
+    }
+
+    private function setLocale(Request $request, LocaleEntity $locale): void
+    {
         $request->setLocale($locale->getCode());
         $request->attributes->set('_locale', $locale->getCode('_'));
         $request->attributes->set('locale', $locale);
     }
 
-    private function setRouterContext(Request $request): void
+    private function setRouterContext(LocaleEntity $locale): void
     {
         if ($this->router === null) {
             return;
         }
-
-        $domain = $request->attributes->get('domain');
-        if (!($domain instanceof DomainEntity)) {
-            return;
-        }
-
-        $locale = $this->getLocale($domain, $request);
 
         $this->router->getContext()->setParameter('_locale', $locale->getCode('_'));
         $this->router->getContext()->setParameter('locale', $locale);
