@@ -49,13 +49,12 @@ class LocaleListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        /** @var DomainEntity|null $domain */
         $domain = $request->attributes->get('domain');
-        if ($domain === null) {
+        if (!($domain instanceof DomainEntity)) {
             return;
         }
 
-        $request->setDefaultLocale($domain->getWebsite()->getDefaultLocale()->getCode());
+        $request->setDefaultLocale($domain->getWebsite()->getDefaultLocale()->getCode('_'));
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -75,9 +74,8 @@ class LocaleListener implements EventSubscriberInterface
 
     private function setLocale(Request $request): void
     {
-        /** @var DomainEntity|null $domain */
         $domain = $request->attributes->get('domain');
-        if ($domain === null) {
+        if (!($domain instanceof DomainEntity)) {
             return;
         }
 
@@ -94,9 +92,8 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var DomainEntity|null $domain */
         $domain = $request->attributes->get('domain');
-        if ($domain === null) {
+        if (!($domain instanceof DomainEntity)) {
             return;
         }
 
