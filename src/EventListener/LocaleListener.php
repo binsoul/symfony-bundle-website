@@ -114,8 +114,13 @@ class LocaleListener implements EventSubscriberInterface
         } elseif ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_PARAMETER) {
             $locale = $this->localeFromRequest($request, $availableLocales);
         } elseif ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_PATH) {
-            $parts = explode('/', trim($request->getPathInfo(), '/'));
-            $locale = $this->findLocale($parts[0], $availableLocales);
+            $uri = $request->getUri();
+            $path = (string) substr($uri, strlen($domain->getUrl()));
+            $path = trim($path, '/');
+            if ($path !== '') {
+                $parts = explode('/', $path);
+                $locale = $this->findLocale($parts[0], $availableLocales);
+            }
         }
 
         if ($locale === null) {
