@@ -39,7 +39,7 @@ class LocaleListener implements EventSubscriberInterface
         return [
             KernelEvents::REQUEST => [
                 ['setDefaultLocale', 100],
-                ['onKernelRequest', 16],
+                ['onKernelRequest', 90],
             ],
             KernelEvents::FINISH_REQUEST => [['onKernelFinishRequest', 0]],
         ];
@@ -89,7 +89,7 @@ class LocaleListener implements EventSubscriberInterface
 
     private function setLocale(Request $request, LocaleEntity $locale): void
     {
-        $request->setLocale($locale->getCode());
+        $request->setLocale($locale->getCode('_'));
         $request->attributes->set('_locale', $locale->getCode('_'));
         $request->attributes->set('locale', $locale);
     }
