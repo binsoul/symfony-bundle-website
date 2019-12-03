@@ -6,6 +6,6 @@ namespace BinSoul\Symfony\Bundle\Website;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class WebsiteBundle extends Bundle
+class BinsoulWebsiteBundle extends Bundle
 {
 }
