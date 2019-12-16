@@ -6,7 +6,7 @@ namespace BinSoul\Symfony\Bundle\Website\Repository;
 
 use BinSoul\Symfony\Bundle\Doctrine\Repository\AbstractRepository;
 use BinSoul\Symfony\Bundle\Website\Entity\WebsiteEntity;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class WebsiteRepository extends AbstractRepository
 {
