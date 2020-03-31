@@ -8,6 +8,7 @@ use BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -243,7 +244,7 @@ class WebsiteEntity
     /**
      * @return ArrayCollection|LocaleEntity[]
      */
-    public function getAdditionalLocales(): ArrayCollection
+    public function getAdditionalLocales(): Collection
     {
         return $this->additionalLocales;
     }
@@ -282,7 +283,7 @@ class WebsiteEntity
     /**
      * @return ArrayCollection|CountryEntity[]
      */
-    public function getAdditionalCountries(): ArrayCollection
+    public function getAdditionalCountries(): Collection
     {
         return $this->additionalCountries;
     }
@@ -311,7 +312,7 @@ class WebsiteEntity
     /**
      * @return ArrayCollection|CurrencyEntity[]
      */
-    public function getAdditionalCurrencies(): ArrayCollection
+    public function getAdditionalCurrencies(): Collection
     {
         return $this->additionalCurrencies;
     }
