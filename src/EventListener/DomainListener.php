@@ -19,14 +19,17 @@ class DomainListener implements EventSubscriberInterface
      * @var RouterInterface|null
      */
     private $router;
+
     /**
      * @var RequestStack
      */
     private $requestStack;
+
     /**
      * @var DomainRepository
      */
     private $domainRepository;
+
     /**
      * @var DomainEntity[]
      */
@@ -35,13 +38,16 @@ class DomainListener implements EventSubscriberInterface
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(RequestStack $requestStack, DomainRepository $domainRepository, RouterInterface $router = null)
+    public function __construct(RequestStack $requestStack, DomainRepository $domainRepository, ?RouterInterface $router = null)
     {
         $this->requestStack = $requestStack;
         $this->domainRepository = $domainRepository;
         $this->router = $router;
     }
 
+    /**
+     * @return mixed[][]
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -58,6 +64,7 @@ class DomainListener implements EventSubscriberInterface
     public function onKernelFinishRequest(): void
     {
         $parentRequest = $this->requestStack->getParentRequest();
+
         if ($parentRequest !== null) {
             $this->setDomainParameters($parentRequest);
         }
@@ -66,6 +73,7 @@ class DomainListener implements EventSubscriberInterface
     private function setDomainParameters(Request $request): void
     {
         $domains = $this->loadDomains();
+
         if (count($domains) === 0) {
             return;
         }
@@ -73,6 +81,7 @@ class DomainListener implements EventSubscriberInterface
         $uri = $request->getUri();
 
         $matches = [];
+
         foreach ($domains as $domain) {
             if (stripos($uri, $domain->getUrl()) === 0) {
                 $matches[strlen($domain->getUrl())] = $domain;

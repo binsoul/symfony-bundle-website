@@ -26,6 +26,9 @@ class CookieListener implements EventSubscriberInterface
         $this->requestStack = $requestStack;
     }
 
+    /**
+     * @return mixed[][]
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -42,6 +45,7 @@ class CookieListener implements EventSubscriberInterface
     public function onKernelFinishRequest(): void
     {
         $parentRequest = $this->requestStack->getParentRequest();
+
         if ($parentRequest !== null) {
             $this->setCookieParameters($parentRequest);
         }
@@ -49,20 +53,23 @@ class CookieListener implements EventSubscriberInterface
 
     private function setCookieParameters(Request $request): void
     {
-        if (session_status() !== PHP_SESSION_NONE || !$request->attributes->has('domain')) {
+        if (session_status() !== PHP_SESSION_NONE || ! $request->attributes->has('domain')) {
             return;
         }
 
         $domain = $request->attributes->get('domain');
-        if (!($domain instanceof DomainEntity)) {
+
+        if (! ($domain instanceof DomainEntity)) {
             return;
         }
 
         $host = parse_url($domain->getUrl(), PHP_URL_HOST);
+
         if ($host) {
             ini_set('session.cookie_domain', $host);
 
             $path = (string) parse_url($domain->getUrl(), PHP_URL_PATH);
+
             if (trim($path, '/') !== '') {
                 ini_set('session.cookie_path', $path);
             }

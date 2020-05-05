@@ -20,6 +20,7 @@ class LocaleListener implements EventSubscriberInterface
      * @var RouterInterface|null
      */
     private $router;
+
     /**
      * @var RequestStack
      */
@@ -28,12 +29,15 @@ class LocaleListener implements EventSubscriberInterface
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(RequestStack $requestStack, RouterInterface $router = null)
+    public function __construct(RequestStack $requestStack, ?RouterInterface $router = null)
     {
         $this->requestStack = $requestStack;
         $this->router = $router;
     }
 
+    /**
+     * @return mixed[][]
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -50,7 +54,8 @@ class LocaleListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $domain = $request->attributes->get('domain');
-        if (!($domain instanceof DomainEntity)) {
+
+        if (! ($domain instanceof DomainEntity)) {
             return;
         }
 
@@ -62,7 +67,8 @@ class LocaleListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $domain = $request->attributes->get('domain');
-        if (!($domain instanceof DomainEntity)) {
+
+        if (! ($domain instanceof DomainEntity)) {
             return;
         }
 
@@ -75,12 +81,14 @@ class LocaleListener implements EventSubscriberInterface
     public function onKernelFinishRequest(): void
     {
         $parentRequest = $this->requestStack->getParentRequest();
+
         if ($parentRequest === null) {
             return;
         }
 
         $domain = $parentRequest->attributes->get('domain');
-        if (!($domain instanceof DomainEntity)) {
+
+        if (! ($domain instanceof DomainEntity)) {
             return;
         }
 
@@ -110,6 +118,7 @@ class LocaleListener implements EventSubscriberInterface
         $availableLocales = $website->getAllLocales();
 
         $locale = null;
+
         if ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_SUBDOMAIN) {
             $locale = $domain->getDefaultLocale();
         } elseif ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_PARAMETER) {
@@ -118,6 +127,7 @@ class LocaleListener implements EventSubscriberInterface
             $uri = $request->getUri();
             $path = (string) substr($uri, strlen($domain->getUrl()));
             $path = trim($path, '/');
+
             if ($path !== '') {
                 $parts = explode('/', $path);
                 $locale = $this->findLocale($parts[0], $availableLocales);
@@ -139,15 +149,17 @@ class LocaleListener implements EventSubscriberInterface
         $session = $request->getSession();
 
         $code = $request->get('_locale');
+
         if ($code === null && $session !== null && $request->hasPreviousSession()) {
             $code = $session->get('_locale');
         }
 
-        if (!$code) {
+        if (! $code) {
             return null;
         }
 
         $locale = $this->findLocale((string) $code, $availableLocales);
+
         if ($locale === null) {
             return null;
         }

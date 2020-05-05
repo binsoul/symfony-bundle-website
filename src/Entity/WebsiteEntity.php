@@ -25,7 +25,9 @@ use Doctrine\ORM\Mapping as ORM;
 class WebsiteEntity
 {
     public const LOCALE_TYPE_PARAMETER = 1;
+
     public const LOCALE_TYPE_PATH = 2;
+
     public const LOCALE_TYPE_SUBDOMAIN = 3;
 
     /**
@@ -86,7 +88,7 @@ class WebsiteEntity
     private $defaultLocale;
 
     /**
-     * @var LocaleEntity[]|ArrayCollection
+     * @var LocaleEntity[]|Collection<int, LocaleEntity>
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
      * @ORM\JoinTable(
      *     name="website_locale",
@@ -110,7 +112,7 @@ class WebsiteEntity
     private $defaultCountry;
 
     /**
-     * @var CountryEntity[]|ArrayCollection
+     * @var CountryEntity[]|Collection<int, CountryEntity>
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity")
      * @ORM\JoinTable(
      *     name="website_country",
@@ -128,7 +130,7 @@ class WebsiteEntity
     private $defaultCurrency;
 
     /**
-     * @var CurrencyEntity[]|ArrayCollection
+     * @var CurrencyEntity[]|Collection<int, CurrencyEntity>
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity")
      * @ORM\JoinTable(
      *     name="website_currency",
@@ -242,7 +244,7 @@ class WebsiteEntity
     }
 
     /**
-     * @return ArrayCollection|LocaleEntity[]
+     * @return Collection<int, LocaleEntity>|LocaleEntity[]
      */
     public function getAdditionalLocales(): Collection
     {
@@ -281,7 +283,7 @@ class WebsiteEntity
     }
 
     /**
-     * @return ArrayCollection|CountryEntity[]
+     * @return Collection<int, CountryEntity>|CountryEntity[]
      */
     public function getAdditionalCountries(): Collection
     {
@@ -310,7 +312,7 @@ class WebsiteEntity
     }
 
     /**
-     * @return ArrayCollection|CurrencyEntity[]
+     * @return Collection<int, CurrencyEntity>|CurrencyEntity[]
      */
     public function getAdditionalCurrencies(): Collection
     {
