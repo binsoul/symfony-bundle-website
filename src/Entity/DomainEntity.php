@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="domain",
  *     uniqueConstraints={
- *        @ORM\UniqueConstraint(columns={"url"}),
+ *         @ORM\UniqueConstraint(columns={"url"}),
  *     }
  * )
  */

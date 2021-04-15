@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="website",
  *     uniqueConstraints={
- *        @ORM\UniqueConstraint(columns={"name"}),
+ *         @ORM\UniqueConstraint(columns={"name"}),
  *     }
  * )
  */
@@ -92,8 +92,11 @@ class WebsiteEntity
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
      * @ORM\JoinTable(
      *     name="website_locale",
-     *     joinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="locale_id", referencedColumnName="id", onDelete="CASCADE")}
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="locale_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     private $additionalLocales;
@@ -116,8 +119,11 @@ class WebsiteEntity
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity")
      * @ORM\JoinTable(
      *     name="website_country",
-     *     joinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="country_id", referencedColumnName="id", onDelete="CASCADE")}
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     private $additionalCountries;
@@ -134,8 +140,11 @@ class WebsiteEntity
      * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity")
      * @ORM\JoinTable(
      *     name="website_currency",
-     *     joinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="currency_id", referencedColumnName="id", onDelete="CASCADE")}
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="currency_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     private $additionalCurrencies;
