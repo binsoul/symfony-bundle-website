@@ -6,6 +6,7 @@ namespace BinSoul\Symfony\Bundle\Website\Entity;
 
 use BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
+use BinSoul\Symfony\Bundle\I18n\Entity\LanguageEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -269,6 +270,25 @@ class WebsiteEntity
         array_unshift($result, $this->defaultLocale);
 
         return $result;
+    }
+
+
+    /**
+     * @return LanguageEntity[]
+     */
+    public function getAllLanguages(): array
+    {
+        $result = [];
+
+        $language = $this->defaultLocale->getLanguage();
+        $result[$language->getIso2()] = $language;
+
+        foreach ($this->additionalLocales as $additionalLocale) {
+            $language = $additionalLocale->getLanguage();
+            $result[$language->getIso2()] = $language;
+        }
+
+        return array_values($result);
     }
 
     public function getLocaleType(): int
