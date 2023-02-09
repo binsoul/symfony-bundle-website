@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\Website\Entity;
 
+use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\LanguageEntity;
@@ -290,6 +291,32 @@ class WebsiteEntity
 
         return array_values($result);
     }
+
+    /**
+     * Chooses an available locale for the given locale code. If allowed the first locale with the same language will be returned in case no other locale matches.
+     */
+    public function chooseAvailableLocale(string $localeCode, bool $allowAnyLocaleWithSameLanguage = false): ?LocaleEntity
+    {
+        $locale = DefaultLocale::fromString($localeCode);
+        $sameLanguageLocale = null;
+
+        while (! $locale->isRoot()) {
+            foreach ($this->getAllLocales() as $availableLocale) {
+                if ($locale->getCode() === $availableLocale->getCode()) {
+                    return $availableLocale;
+                }
+
+                if ($sameLanguageLocale === null && $locale->getLanguage() === $availableLocale->getLanguage()->getIso2()) {
+                    $sameLanguageLocale = $availableLocale;
+                }
+            }
+
+            $locale = $locale->getParent();
+        }
+
+        return $allowAnyLocaleWithSameLanguage ? $sameLanguageLocale : null;
+    }
+
 
     public function getLocaleType(): int
     {

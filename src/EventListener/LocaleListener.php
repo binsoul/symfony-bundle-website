@@ -115,14 +115,12 @@ class LocaleListener implements EventSubscriberInterface
     private function getLocale(DomainEntity $domain, Request $request): LocaleEntity
     {
         $website = $domain->getWebsite();
-        $availableLocales = $website->getAllLocales();
-
         $locale = null;
 
         if ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_SUBDOMAIN) {
             $locale = $domain->getDefaultLocale();
         } elseif ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_PARAMETER) {
-            $locale = $this->localeFromRequest($request, $availableLocales);
+            $locale = $this->localeFromRequest($request, $website);
         } elseif ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_PATH) {
             $uri = $request->getUri();
             $path = (string) substr($uri, strlen($domain->getUrl()));
@@ -130,7 +128,7 @@ class LocaleListener implements EventSubscriberInterface
 
             if ($path !== '') {
                 $parts = explode('/', $path);
-                $locale = $this->findLocale($parts[0], $availableLocales);
+                $locale = $website->chooseAvailableLocale($parts[0]);
             }
         }
 
@@ -141,10 +139,7 @@ class LocaleListener implements EventSubscriberInterface
         return $locale;
     }
 
-    /**
-     * @param LocaleEntity[] $availableLocales
-     */
-    private function localeFromRequest(Request $request, array $availableLocales): ?LocaleEntity
+    private function localeFromRequest(Request $request, WebsiteEntity $website): ?LocaleEntity
     {
         $session = null;
         if ($request->hasSession()) {
@@ -161,7 +156,7 @@ class LocaleListener implements EventSubscriberInterface
             return null;
         }
 
-        $locale = $this->findLocale((string) $code, $availableLocales);
+        $locale = $website->chooseAvailableLocale((string) $code);
 
         if ($locale === null) {
             return null;
@@ -172,19 +167,5 @@ class LocaleListener implements EventSubscriberInterface
         }
 
         return $locale;
-    }
-
-    /**
-     * @param LocaleEntity[] $availableLocales
-     */
-    private function findLocale(string $code, array $availableLocales): ?LocaleEntity
-    {
-        foreach ($availableLocales as $locale) {
-            if (strtolower($locale->getCode()) === strtolower($code)) {
-                return $locale;
-            }
-        }
-
-        return null;
     }
 }
