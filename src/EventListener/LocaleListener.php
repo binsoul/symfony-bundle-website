@@ -146,7 +146,10 @@ class LocaleListener implements EventSubscriberInterface
      */
     private function localeFromRequest(Request $request, array $availableLocales): ?LocaleEntity
     {
-        $session = $request->getSession();
+        $session = null;
+        if ($request->hasSession()) {
+            $session = $request->getSession();
+        }
 
         $code = $request->get('_locale');
 
