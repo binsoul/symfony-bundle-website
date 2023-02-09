@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\Website\Entity;
 
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,13 +21,13 @@ class DomainEntity
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id;
 
     /**
      * @var string URL of the domain
      */
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private string $url;
 
     #[ORM\ManyToOne(targetEntity: WebsiteEntity::class)]
@@ -34,7 +35,7 @@ class DomainEntity
     private WebsiteEntity $website;
 
     #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn]
     private ?LocaleEntity $defaultLocale = null;
 
     /**

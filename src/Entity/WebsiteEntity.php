@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\Website\Entity;
 
+use App\Entity\Catalog\ProductAttributeEntity;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
@@ -11,6 +12,7 @@ use BinSoul\Symfony\Bundle\I18n\Entity\LanguageEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,49 +43,49 @@ class WebsiteEntity
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id;
 
     /**
      * @var string Name of the website
      */
-    #[ORM\Column(type: 'string', length: 64, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 64)]
     private string $name;
 
     /**
      * @var string|null Theme of the website
      */
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     private ?string $theme = null;
 
     /**
      * @var string|null Logo 1 of the website
      */
-    #[ORM\Column(type: 'string', length: 128, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 128, nullable: true)]
     private ?string $logo1 = null;
 
     /**
      * @var string|null Logo 2 of the website
      */
-    #[ORM\Column(type: 'string', length: 128, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 128, nullable: true)]
     private ?string $logo2 = null;
 
     /**
      * @var string|null Copyright of the website
      */
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     private ?string $copyright = null;
 
     /**
      * @var string|null Prefix for the meta title
      */
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     private ?string $metaTitlePrefix = null;
 
     /**
      * @var string|null Suffix for the meta title
      */
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     private ?string $metaTitleSuffix = null;
 
     #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
@@ -91,18 +93,15 @@ class WebsiteEntity
     private LocaleEntity $defaultLocale;
 
     /**
-     * @var LocaleEntity[]|Collection<int, LocaleEntity>
+     * @var WebsiteLocaleEntity[]|Collection<int, WebsiteLocaleEntity>
      */
-    #[ORM\JoinTable(name: 'website_locale')]
-    #[ORM\JoinColumn(name: 'website_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ORM\InverseJoinColumn(name: 'locale_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ORM\ManyToMany(targetEntity: LocaleEntity::class)]
+    #[ORM\OneToMany(mappedBy: 'website', targetEntity: WebsiteLocaleEntity::class)]
     private Collection $additionalLocales;
 
     /**
      * @var int Type of the locale selection
      */
-    #[ORM\Column(type: 'integer', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: Types::INTEGER, options: ['default' => 1])]
     private int $localeType = self::LOCALE_TYPE_PARAMETER;
 
     #[ORM\ManyToOne(targetEntity: CountryEntity::class)]
@@ -113,7 +112,7 @@ class WebsiteEntity
      * @var CountryEntity[]|Collection<int, CountryEntity>
      */
     #[ORM\JoinTable(name: 'website_country')]
-    #[ORM\JoinColumn(name: 'website_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'website_id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\ManyToMany(targetEntity: CountryEntity::class)]
     private Collection $additionalCountries;
@@ -126,12 +125,12 @@ class WebsiteEntity
      * @var CurrencyEntity[]|Collection<int, CurrencyEntity>
      */
     #[ORM\JoinTable(name: 'website_currency')]
-    #[ORM\JoinColumn(name: 'website_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'website_id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'currency_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\ManyToMany(targetEntity: CurrencyEntity::class)]
     private Collection $additionalCurrencies;
 
-    #[ORM\Column(type: 'boolean', nullable: false)]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isVisible = false;
 
     /**
@@ -236,7 +235,12 @@ class WebsiteEntity
      */
     public function getAdditionalLocales(): Collection
     {
-        return $this->additionalLocales;
+        $result = [];
+        foreach ($this->additionalLocales as $additionalLocale) {
+            $result[] = $additionalLocale->getLocale();
+        }
+
+        return new ArrayCollection($result);
     }
 
     /**
@@ -244,8 +248,10 @@ class WebsiteEntity
      */
     public function getAllLocales(): array
     {
-        $result = $this->additionalLocales->toArray();
-        array_unshift($result, $this->defaultLocale);
+        $result = [$this->defaultLocale];
+        foreach ($this->additionalLocales as $additionalLocale) {
+            $result[] = $additionalLocale->getLocale();
+        }
 
         return $result;
     }
@@ -261,7 +267,7 @@ class WebsiteEntity
         $result[$language->getIso2()] = $language;
 
         foreach ($this->additionalLocales as $additionalLocale) {
-            $language = $additionalLocale->getLanguage();
+            $language = $additionalLocale->getLocale()->getLanguage();
             $result[$language->getIso2()] = $language;
         }
 
@@ -274,23 +280,39 @@ class WebsiteEntity
     public function chooseAvailableLocale(string $localeCode, bool $allowAnyLocaleWithSameLanguage = false): ?LocaleEntity
     {
         $locale = DefaultLocale::fromString($localeCode);
-        $sameLanguageLocale = null;
 
         while (! $locale->isRoot()) {
             foreach ($this->getAllLocales() as $availableLocale) {
                 if ($locale->getCode() === $availableLocale->getCode()) {
                     return $availableLocale;
                 }
-
-                if ($sameLanguageLocale === null && $locale->getLanguage() === $availableLocale->getLanguage()->getIso2()) {
-                    $sameLanguageLocale = $availableLocale;
-                }
             }
 
             $locale = $locale->getParent();
         }
 
-        return $allowAnyLocaleWithSameLanguage ? $sameLanguageLocale : null;
+        if (! $allowAnyLocaleWithSameLanguage) {
+              return null;
+        }
+
+        if ($this->defaultLocale->getLanguage()->getIso2() === $locale->getLanguage()) {
+            return $this->defaultLocale;
+        }
+
+        $sameLanguageLocale = null;
+        foreach ($this->additionalLocales as $availableLocale) {
+            if ($availableLocale->getLocale()->getLanguage()->getIso2() === $locale->getLanguage()) {
+                if ($availableLocale->isDefaultForLanguage()) {
+                    return $availableLocale->getLocale();
+                }
+
+                if ($sameLanguageLocale === null) {
+                    $sameLanguageLocale = $availableLocale->getLocale();
+                }
+            }
+        }
+
+        return $sameLanguageLocale;
     }
 
     public function getLocaleType(): int
