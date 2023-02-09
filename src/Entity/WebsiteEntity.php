@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\Website\Entity;
 
-use App\Entity\Catalog\ProductAttributeEntity;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
@@ -236,6 +235,7 @@ class WebsiteEntity
     public function getAdditionalLocales(): Collection
     {
         $result = [];
+
         foreach ($this->additionalLocales as $additionalLocale) {
             $result[] = $additionalLocale->getLocale();
         }
@@ -249,6 +249,7 @@ class WebsiteEntity
     public function getAllLocales(): array
     {
         $result = [$this->defaultLocale];
+
         foreach ($this->additionalLocales as $additionalLocale) {
             $result[] = $additionalLocale->getLocale();
         }
@@ -292,14 +293,17 @@ class WebsiteEntity
         }
 
         if (! $allowAnyLocaleWithSameLanguage) {
-              return null;
+            return null;
         }
+
+        $locale = DefaultLocale::fromString($localeCode);
 
         if ($this->defaultLocale->getLanguage()->getIso2() === $locale->getLanguage()) {
             return $this->defaultLocale;
         }
 
         $sameLanguageLocale = null;
+
         foreach ($this->additionalLocales as $availableLocale) {
             if ($availableLocale->getLocale()->getLanguage()->getIso2() === $locale->getLanguage()) {
                 if ($availableLocale->isDefaultForLanguage()) {

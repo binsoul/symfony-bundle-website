@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\Website\Entity;
 
-
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
