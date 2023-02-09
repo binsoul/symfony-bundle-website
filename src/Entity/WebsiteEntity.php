@@ -15,147 +15,124 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Represents a website.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="website",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"name"}),
- *     }
- * )
  */
+#[ORM\Table(name: 'website')]
+#[ORM\UniqueConstraint(columns: ['name'])]
+#[ORM\Entity]
 class WebsiteEntity
 {
+    /**
+     * @var int
+     */
     public const LOCALE_TYPE_PARAMETER = 1;
 
+    /**
+     * @var int
+     */
     public const LOCALE_TYPE_PATH = 2;
 
+    /**
+     * @var int
+     */
     public const LOCALE_TYPE_SUBDOMAIN = 3;
 
     /**
      * @var int|null ID of the website
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id;
 
     /**
      * @var string Name of the website
-     * @ORM\Column(type="string", length=64, nullable=false)
      */
-    private $name;
+    #[ORM\Column(type: 'string', length: 64, nullable: false)]
+    private string $name;
 
     /**
      * @var string|null Theme of the website
-     * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $theme;
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private ?string $theme = null;
 
     /**
      * @var string|null Logo 1 of the website
-     * @ORM\Column(type="string", length=128, nullable=true)
      */
-    private $logo1;
+    #[ORM\Column(type: 'string', length: 128, nullable: true)]
+    private ?string $logo1 = null;
 
     /**
      * @var string|null Logo 2 of the website
-     * @ORM\Column(type="string", length=128, nullable=true)
      */
-    private $logo2;
+    #[ORM\Column(type: 'string', length: 128, nullable: true)]
+    private ?string $logo2 = null;
 
     /**
      * @var string|null Copyright of the website
-     * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $copyright;
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private ?string $copyright = null;
 
     /**
      * @var string|null Prefix for the meta title
-     * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $metaTitlePrefix;
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private ?string $metaTitlePrefix = null;
 
     /**
      * @var string|null Suffix for the meta title
-     * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $metaTitleSuffix;
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private ?string $metaTitleSuffix = null;
 
-    /**
-     * @var LocaleEntity
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $defaultLocale;
+    #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private LocaleEntity $defaultLocale;
 
     /**
      * @var LocaleEntity[]|Collection<int, LocaleEntity>
-     * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
-     * @ORM\JoinTable(
-     *     name="website_locale",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="locale_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
      */
-    private $additionalLocales;
+    #[ORM\JoinTable(name: 'website_locale')]
+    #[ORM\JoinColumn(name: 'website_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'locale_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToMany(targetEntity: LocaleEntity::class)]
+    private Collection $additionalLocales;
 
     /**
      * @var int Type of the locale selection
-     * @ORM\Column(type="integer", nullable=false, options={"default"=1})
      */
-    private $localeType = self::LOCALE_TYPE_PARAMETER;
+    #[ORM\Column(type: 'integer', nullable: false, options: ['default' => 1])]
+    private int $localeType = self::LOCALE_TYPE_PARAMETER;
 
-    /**
-     * @var CountryEntity
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $defaultCountry;
+    #[ORM\ManyToOne(targetEntity: CountryEntity::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private CountryEntity $defaultCountry;
 
     /**
      * @var CountryEntity[]|Collection<int, CountryEntity>
-     * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity")
-     * @ORM\JoinTable(
-     *     name="website_country",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
      */
-    private $additionalCountries;
+    #[ORM\JoinTable(name: 'website_country')]
+    #[ORM\JoinColumn(name: 'website_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToMany(targetEntity: CountryEntity::class)]
+    private Collection $additionalCountries;
 
-    /**
-     * @var CurrencyEntity
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $defaultCurrency;
+    #[ORM\ManyToOne(targetEntity: CurrencyEntity::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private CurrencyEntity $defaultCurrency;
 
     /**
      * @var CurrencyEntity[]|Collection<int, CurrencyEntity>
-     * @ORM\ManyToMany(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity")
-     * @ORM\JoinTable(
-     *     name="website_currency",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="currency_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
      */
-    private $additionalCurrencies;
+    #[ORM\JoinTable(name: 'website_currency')]
+    #[ORM\JoinColumn(name: 'website_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'currency_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToMany(targetEntity: CurrencyEntity::class)]
+    private Collection $additionalCurrencies;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean", nullable=false)
-     */
-    private $isVisible;
+    #[ORM\Column(type: 'boolean', nullable: false)]
+    private bool $isVisible = false;
 
     /**
      * Constructs an instance of this class.
@@ -273,7 +250,6 @@ class WebsiteEntity
         return $result;
     }
 
-
     /**
      * @return LanguageEntity[]
      */
@@ -316,7 +292,6 @@ class WebsiteEntity
 
         return $allowAnyLocaleWithSameLanguage ? $sameLanguageLocale : null;
     }
-
 
     public function getLocaleType(): int
     {

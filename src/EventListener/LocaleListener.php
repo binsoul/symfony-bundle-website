@@ -16,15 +16,9 @@ use Symfony\Component\Routing\RouterInterface;
 
 class LocaleListener implements EventSubscriberInterface
 {
-    /**
-     * @var RouterInterface|null
-     */
-    private $router;
+    private ?RouterInterface $router;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * Constructs an instance of this class.
@@ -123,7 +117,7 @@ class LocaleListener implements EventSubscriberInterface
             $locale = $this->localeFromRequest($request, $website);
         } elseif ($website->getLocaleType() === WebsiteEntity::LOCALE_TYPE_PATH) {
             $uri = $request->getUri();
-            $path = (string) substr($uri, strlen($domain->getUrl()));
+            $path = substr($uri, strlen($domain->getUrl()));
             $path = trim($path, '/');
 
             if ($path !== '') {
@@ -142,6 +136,7 @@ class LocaleListener implements EventSubscriberInterface
     private function localeFromRequest(Request $request, WebsiteEntity $website): ?LocaleEntity
     {
         $session = null;
+
         if ($request->hasSession()) {
             $session = $request->getSession();
         }

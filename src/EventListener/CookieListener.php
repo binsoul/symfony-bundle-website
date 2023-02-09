@@ -13,10 +13,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class CookieListener implements EventSubscriberInterface
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * Constructs an instance of this class.

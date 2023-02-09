@@ -15,20 +15,11 @@ use Symfony\Component\Routing\RouterInterface;
 
 class DomainListener implements EventSubscriberInterface
 {
-    /**
-     * @var RouterInterface|null
-     */
-    private $router;
+    private ?RouterInterface $router;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
-    /**
-     * @var DomainRepository
-     */
-    private $domainRepository;
+    private DomainRepository $domainRepository;
 
     /**
      * @var DomainEntity[]
@@ -74,7 +65,7 @@ class DomainListener implements EventSubscriberInterface
     {
         $domains = $this->loadDomains();
 
-        if (count($domains) === 0) {
+        if ($domains === []) {
             return;
         }
 
@@ -88,7 +79,7 @@ class DomainListener implements EventSubscriberInterface
             }
         }
 
-        if (count($matches) === 0) {
+        if ($matches === []) {
             return;
         }
 
@@ -107,7 +98,7 @@ class DomainListener implements EventSubscriberInterface
      */
     private function loadDomains(): array
     {
-        if (count($this->domains) === 0) {
+        if ($this->domains === []) {
             $this->domains = $this->domainRepository->loadAll();
         }
 

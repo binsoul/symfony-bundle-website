@@ -9,44 +9,33 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Represents one domain of a website.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="domain",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"url"}),
- *     }
- * )
  */
+#[ORM\Table(name: 'domain')]
+#[ORM\UniqueConstraint(columns: ['url'])]
+#[ORM\Entity]
 class DomainEntity
 {
     /**
      * @var int|null ID of the domain
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id;
 
     /**
      * @var string URL of the domain
-     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $url;
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private string $url;
 
-    /**
-     * @var WebsiteEntity
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\Website\Entity\WebsiteEntity")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $website;
+    #[ORM\ManyToOne(targetEntity: WebsiteEntity::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private WebsiteEntity $website;
 
-    /**
-     * @var LocaleEntity|null
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $defaultLocale;
+    #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?LocaleEntity $defaultLocale = null;
 
     /**
      * Constructs an instance of this class.
