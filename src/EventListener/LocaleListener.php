@@ -137,13 +137,13 @@ class LocaleListener implements EventSubscriberInterface
     {
         $session = null;
 
-        if ($request->hasSession()) {
+        if ($request->hasPreviousSession()) {
             $session = $request->getSession();
         }
 
         $code = $request->get('_locale');
 
-        if ($code === null && $session !== null && $request->hasPreviousSession()) {
+        if ($code === null && $session !== null) {
             $code = $session->get('_locale');
         }
 

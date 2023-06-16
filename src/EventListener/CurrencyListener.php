@@ -90,13 +90,13 @@ class CurrencyListener implements EventSubscriberInterface
         $website = $domain->getWebsite();
         $session = null;
 
-        if ($request->hasSession()) {
+        if ($request->hasPreviousSession()) {
             $session = $request->getSession();
         }
 
         $code = $request->get('_currency');
 
-        if ($code === null && $session !== null && $request->hasPreviousSession()) {
+        if ($code === null && $session !== null) {
             $code = $session->get('_currency');
         }
 
