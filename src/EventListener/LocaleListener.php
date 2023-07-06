@@ -148,17 +148,17 @@ class LocaleListener implements EventSubscriberInterface
         }
 
         if (! $code) {
-            return null;
+            return $website->getDefaultLocale();
         }
 
         $locale = $website->chooseAvailableLocale((string) $code);
 
         if ($locale === null) {
-            return null;
+            $locale = $website->getDefaultLocale();
         }
 
-        if ($session !== null) {
-            $session->set('_locale', $locale->getCode());
+        if ($request->hasSession()) {
+            $request->getSession()->set('_locale', $locale->getCode());
         }
 
         return $locale;

@@ -119,8 +119,8 @@ class CurrencyListener implements EventSubscriberInterface
             $currency = $website->getDefaultCurrency();
         }
 
-        if ($session !== null) {
-            $session->set('_currency', $currency->getIso3());
+        if ($request->hasSession()) {
+            $request->getSession()->set('_currency', $currency->getIso3());
         }
 
         return $currency;
