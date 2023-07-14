@@ -22,7 +22,7 @@ class WebsiteLocaleEntity
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private WebsiteEntity $website;
 
-    #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
+    #[ORM\ManyToOne(targetEntity: LocaleEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private LocaleEntity $locale;
 
