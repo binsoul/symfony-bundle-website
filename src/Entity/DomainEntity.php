@@ -33,11 +33,9 @@ class DomainEntity
 
     #[ORM\ManyToOne(targetEntity: WebsiteEntity::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private WebsiteEntity $website;
 
     #[ORM\ManyToOne(targetEntity: LocaleEntity::class, fetch: 'EAGER')]
-    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private ?LocaleEntity $defaultLocale = null;
 
     /**

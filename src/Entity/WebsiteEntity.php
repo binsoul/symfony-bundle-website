@@ -90,7 +90,6 @@ class WebsiteEntity
 
     #[ORM\ManyToOne(targetEntity: LocaleEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private LocaleEntity $defaultLocale;
 
     /**
@@ -108,7 +107,6 @@ class WebsiteEntity
 
     #[ORM\ManyToOne(targetEntity: CountryEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private CountryEntity $defaultCountry;
 
     /**
@@ -123,7 +121,6 @@ class WebsiteEntity
 
     #[ORM\ManyToOne(targetEntity: CurrencyEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private CurrencyEntity $defaultCurrency;
 
     /**
