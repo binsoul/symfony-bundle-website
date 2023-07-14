@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'website_locale')]
 #[ORM\UniqueConstraint(columns: ['website_id', 'locale_id'])]
 #[ORM\Entity]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class WebsiteLocaleEntity
 {
     #[ORM\Id]
@@ -20,10 +21,12 @@ class WebsiteLocaleEntity
 
     #[ORM\ManyToOne(targetEntity: WebsiteEntity::class, inversedBy: 'additionalLocales')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private WebsiteEntity $website;
 
     #[ORM\ManyToOne(targetEntity: LocaleEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private LocaleEntity $locale;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]

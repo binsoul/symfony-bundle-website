@@ -20,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'website')]
 #[ORM\UniqueConstraint(columns: ['name'])]
 #[ORM\Entity]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class WebsiteEntity
 {
     /**
@@ -89,12 +90,14 @@ class WebsiteEntity
 
     #[ORM\ManyToOne(targetEntity: LocaleEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private LocaleEntity $defaultLocale;
 
     /**
      * @var WebsiteLocaleEntity[]|Collection<int, WebsiteLocaleEntity>
      */
     #[ORM\OneToMany(mappedBy: 'website', targetEntity: WebsiteLocaleEntity::class)]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private Collection $additionalLocales;
 
     /**
@@ -105,6 +108,7 @@ class WebsiteEntity
 
     #[ORM\ManyToOne(targetEntity: CountryEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private CountryEntity $defaultCountry;
 
     /**
@@ -114,10 +118,12 @@ class WebsiteEntity
     #[ORM\JoinTable(name: 'website_country')]
     #[ORM\JoinColumn(name: 'website_id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private Collection $additionalCountries;
 
     #[ORM\ManyToOne(targetEntity: CurrencyEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private CurrencyEntity $defaultCurrency;
 
     /**
@@ -127,6 +133,7 @@ class WebsiteEntity
     #[ORM\JoinTable(name: 'website_currency')]
     #[ORM\JoinColumn(name: 'website_id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'currency_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private Collection $additionalCurrencies;
 
     #[ORM\Column(type: Types::BOOLEAN)]
