@@ -34,7 +34,7 @@ class DomainEntity
     #[ORM\JoinColumn(nullable: false)]
     private WebsiteEntity $website;
 
-    #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
+    #[ORM\ManyToOne(targetEntity: LocaleEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn]
     private ?LocaleEntity $defaultLocale = null;
 
