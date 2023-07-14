@@ -87,7 +87,7 @@ class WebsiteEntity
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     private ?string $metaTitleSuffix = null;
 
-    #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
+    #[ORM\ManyToOne(targetEntity: LocaleEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private LocaleEntity $defaultLocale;
 
@@ -103,30 +103,30 @@ class WebsiteEntity
     #[ORM\Column(type: Types::INTEGER, options: ['default' => 1])]
     private int $localeType = self::LOCALE_TYPE_PARAMETER;
 
-    #[ORM\ManyToOne(targetEntity: CountryEntity::class)]
+    #[ORM\ManyToOne(targetEntity: CountryEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private CountryEntity $defaultCountry;
 
     /**
      * @var CountryEntity[]|Collection<int, CountryEntity>
      */
+    #[ORM\ManyToMany(targetEntity: CountryEntity::class)]
     #[ORM\JoinTable(name: 'website_country')]
     #[ORM\JoinColumn(name: 'website_id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ORM\ManyToMany(targetEntity: CountryEntity::class)]
     private Collection $additionalCountries;
 
-    #[ORM\ManyToOne(targetEntity: CurrencyEntity::class)]
+    #[ORM\ManyToOne(targetEntity: CurrencyEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private CurrencyEntity $defaultCurrency;
 
     /**
      * @var CurrencyEntity[]|Collection<int, CurrencyEntity>
      */
+    #[ORM\ManyToMany(targetEntity: CurrencyEntity::class)]
     #[ORM\JoinTable(name: 'website_currency')]
     #[ORM\JoinColumn(name: 'website_id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'currency_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ORM\ManyToMany(targetEntity: CurrencyEntity::class)]
     private Collection $additionalCurrencies;
 
     #[ORM\Column(type: Types::BOOLEAN)]
