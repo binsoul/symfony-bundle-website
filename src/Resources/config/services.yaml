@@ -13,4 +13,4 @@ services:
         tags: ['kernel.event_subscriber']
 
     BinSoul\Symfony\Bundle\Website\EventListener\TablePrefixListener:
-        tags: ['doctrine.event_subscriber']
+        public: true
