@@ -26,17 +26,17 @@ class WebsiteEntity
     /**
      * @var int
      */
-    public const LOCALE_TYPE_PARAMETER = 1;
+    final public const LOCALE_TYPE_PARAMETER = 1;
 
     /**
      * @var int
      */
-    public const LOCALE_TYPE_PATH = 2;
+    final public const LOCALE_TYPE_PATH = 2;
 
     /**
      * @var int
      */
-    public const LOCALE_TYPE_SUBDOMAIN = 3;
+    final public const LOCALE_TYPE_SUBDOMAIN = 3;
 
     /**
      * @var int|null ID of the website

@@ -15,16 +15,16 @@ use Symfony\Component\Routing\RouterInterface;
 
 class DomainListener implements EventSubscriberInterface
 {
-    private ?RouterInterface $router;
+    private readonly ?RouterInterface $router;
 
-    private RequestStack $requestStack;
+    private readonly RequestStack $requestStack;
 
-    private DomainRepository $domainRepository;
+    private readonly DomainRepository $domainRepository;
 
     /**
      * @var DomainEntity[]
      */
-    private $domains = [];
+    private array $domains = [];
 
     /**
      * Constructs an instance of this class.

@@ -15,9 +15,9 @@ use Symfony\Component\Routing\RouterInterface;
 
 class CurrencyListener implements EventSubscriberInterface
 {
-    private ?RouterInterface $router;
+    private readonly ?RouterInterface $router;
 
-    private RequestStack $requestStack;
+    private readonly RequestStack $requestStack;
 
     /**
      * Constructs an instance of this class.
