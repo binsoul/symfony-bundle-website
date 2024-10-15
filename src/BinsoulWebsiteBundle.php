@@ -20,7 +20,7 @@ class BinsoulWebsiteBundle extends Bundle
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createAttributeMappingDriver(
                     ['BinSoul\Symfony\Bundle\Website'],
-                    [realpath(__DIR__.'/Entity')],
+                    [(string) realpath(__DIR__ . '/Entity')],
                 )
             );
         }

@@ -133,7 +133,7 @@ class LocaleListener implements EventSubscriberInterface
         return $locale;
     }
 
-    private function localeFromRequest(Request $request, WebsiteEntity $website): ?LocaleEntity
+    private function localeFromRequest(Request $request, WebsiteEntity $website): LocaleEntity
     {
         $session = null;
 
